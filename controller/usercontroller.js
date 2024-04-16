@@ -7,19 +7,19 @@ exports.updateUser = async (req, res) => {
   }
   try {
     const updatedUser = await user.findByIdAndUpdate(
-      req.params._id,
+      req.user.id,
       { $set: req.body },
       { new: true }
     );
-    const { Password, __v, ...others } = updatedUser._doc;
-    res.status(200).json({ ...others });
+   // const { Password, __v, ...others } = updatedUser._doc;
+    res.status(200).json('UPDATE SUCESSFUL');
   } catch (error) {
     // Handle error if necessary
   }
 };
 exports. deleteUser = async(req,res)=>{
     try {
-        await user.findByIdAndDelete(req.params._id);
+        await user.findByIdAndDelete(req.user._id);
         res.status(200).json('delete successfully');
         
     } catch (error) {
@@ -28,7 +28,7 @@ exports. deleteUser = async(req,res)=>{
 };
 exports. getuser = async(req,res)=>{
     try {
-    const userget  =    await user.findById(req.params._id);
+    const userget  =    await user.findById(req.user._id);
     const { Password, __v, createdAt, ...others } = userget._doc;
     res.status(200).json(others);
     } catch (error) {

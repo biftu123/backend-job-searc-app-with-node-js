@@ -24,8 +24,8 @@ const verifyToken = (req, res, next) => {
 
 const verifyAndAuthorized = async (req, res, next) => {
   verifyToken(req, res, () => {
-    console.log('User role in verifyAndAuthorized:', req.user.role); // Log the role again
-    if (req.user.isAdmin) {
+     // Log the role again
+    if (req.user.id ===req.params.id) {
       next();
     } else {
       console.warn('Unauthorized access attempt'); // Log unauthorized access

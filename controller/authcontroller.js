@@ -16,10 +16,10 @@ exports.createuser = async (req, res, next) => {
     const savedUser = await createUser.save();
 
     // Generate token
-    const token = jwt.sign({ userId: savedUser._id, role: savedUser.isAdmin }, 'job');
+    
 
 
-    res.json({ status: true, success: 'Successfully registered', token });
+    res.json({ status: true, success: 'Successfully registered' });
   } catch (err) {
     next(err);
   }
