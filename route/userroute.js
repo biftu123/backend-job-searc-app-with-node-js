@@ -5,6 +5,6 @@ route.put('/users/',verifyAndAuthorized,usercontroller.updateUser );
 
 route.delete('/users/:_id',verifyAndAuthorized,usercontroller.deleteUser );
 
-route.get('/users/:_id',verifyAndAuthorized,usercontroller.getuser );
+route.get('/users/',verifyAndAuthorized,usercontroller.getuser );
 route.get('/users',verifyAndAuthorized,usercontroller.getalluser );
 module.exports = route;

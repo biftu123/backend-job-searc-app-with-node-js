@@ -28,7 +28,7 @@ exports. deleteUser = async(req,res)=>{
 };
 exports. getuser = async(req,res)=>{
     try {
-    const userget  =    await user.findById(req.user._id);
+    const userget  =    await user.findById(req.user.id);
     const { Password, __v, createdAt, ...others } = userget._doc;
     res.status(200).json(others);
     } catch (error) {
