@@ -52,4 +52,27 @@ exports.search = async (req, res) => {
     res.status(400).json('Error');
   }
 };
-
+exports.getalljob = async (req, res) => {
+  try {
+    const alljob = await job.find();
+    if (alljob.length === 0) {
+      return res.status(404).json('No jobs found');
+    }
+    res.status(200).json(alljob);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json('Internal server error');
+  }
+};
+exports.getjob = async (req, res) => {
+  try {
+    const getjo = await job.findById(req.params.id);
+    if (!getjo) {
+      return res.status(404).json('Job not found');
+    }
+    res.status(200).json(getjo);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json('Internal server error');
+  }
+};

@@ -1,14 +1,17 @@
 const bookmark = require("../model/bookmark");
 const job = require("../model/job");
-const { get } = require("../route/authroute");
+
 exports.cratebookmarks =async (req,res)=>{
  const jobID =req.body.job;
     try {
-        const job = await job.findById(jobID);
-        if(!job){
+        if (!jobID) {
+            return res.status(400).json('Missing required "job" property in request body');
+          }
+        const jobs = await job.findById(jobID);
+        if(!jobs){
             res.status(404).json('not found');
         }
-        const newbook =new bookmark({job:job,userId:req.user.id});
+        const newbook =new bookmark({job:jobs,    userId:req.user.userId });
         const  create = await  newbook.save();
 const{__v,updateAt,...otherinfos} =create._doc;
 res.status(200).json(otherinfos);
@@ -18,7 +21,8 @@ res.status(200).json(otherinfos);
 };
 exports.detetebookmark=async(req,res)=>{
     try {
-        await  bookmark.findByIdAndDelete(req.params.id);
+        const jobId = req.params._id;
+        await  bookmark.findOneAndDelete({ job: jobId, userId: req.user.userId});
         res.status(200).json ("delete sucessfully");
     } catch (error) {
         
@@ -26,7 +30,7 @@ exports.detetebookmark=async(req,res)=>{
 };
 exports.getbookmark=async(req,res)=>{
     try {
-      const getbook =  await  bookmark.find({userId:req.params.userId});
+      const getbook =  await  bookmark.find({userId:req.user.userId}).populate('job');
         res.status(200).json (getbook);
     } catch (error) {
         
