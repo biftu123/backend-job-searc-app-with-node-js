@@ -4,8 +4,10 @@ const authRoute = require('./route/authroute');
 const userroute =require("./route/userroute");
 const jobroute =require("./route/jobroute");
 const bookroute =require("./route/bookmarkroute");
+const Messageroute =require("./route/messageroute");
+const chatroute =require("./route/chatroute");
 const app = express();
-const port = 4006;
+const port = 4099;
 
 mongoose.connect('mongodb://localhost:27017/bifob')
   .then(() => {
@@ -24,7 +26,8 @@ app.use('/', authRoute);
 app.use('/',userroute);
 app.use('/job',jobroute);
 app.use('/bookmark',bookroute);
-
+app.use("/message",Messageroute);
+app.use('/chat',chatroute);
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

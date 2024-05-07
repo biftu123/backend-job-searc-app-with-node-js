@@ -1,9 +1,8 @@
 const mongoose =require("mongoose");
-const { schema } = require("./bookmark");
 const ChatSchema= new mongoose.Schema({
     chatname:{type:String,trim:true},
-    Groupchat:{type:boolen ,default:false},
-    user:[{
+    Groupchat:{type:Boolean ,default:false},
+    users:[{
         type: mongoose.Schema.Types.ObjectId,ref:"user"
     }],
     LatestMessage :{
@@ -16,3 +15,4 @@ const ChatSchema= new mongoose.Schema({
 },{timestamps:true}
 )
 
+module.exports =mongoose.model('Chat',ChatSchema)
