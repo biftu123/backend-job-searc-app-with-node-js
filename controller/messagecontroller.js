@@ -1,6 +1,6 @@
 const user = require('../model/user');
 const Message = require('../model/message');
-const chat = require('../model/chat');
+const Chat = require('../model/chat');
 
 
 exports.sendmessage = async(req ,res)=>{
@@ -18,17 +18,19 @@ exports.sendmessage = async(req ,res)=>{
     try {
         
         var message = await Message.create(NewMessage);
-        messageb= message.populate("sender","username Profile email");
-        messageb= message.populate("chat");
-        messageb= user.populate(messageb,{
-            path:"chat.users",
-            select: "username Profile email"
-        
-        });
-        await chat.findByIdAndUpdate(req.body.chatId,{LatestMessage:message});
-        res.json(message);
+        const populatedMessage = await Message.findById(message._id)
+      .populate("sender", "username Profile email")
+      .populate({
+        path: "chat",
+        populate: { path: "users", select: "username Profile email" }
+      });
+        await Chat.findByIdAndUpdate(req.body.chatId,{LatestMessage:populatedMessage});
+     
+        res.json(populatedMessage);
     } catch (error) {
+        console.log(error);
 return res.status(500).json('error');
+
         
     }
     exports.getmessages = async(req,res)=>{

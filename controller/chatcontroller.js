@@ -1,25 +1,27 @@
 const Chat =require("../model/chat");
 const user =require("../model/user");
 
-
 exports.getChat = async (req, res) => {
-  try {
-    const userId = req.user.userId;
-     Chat.find({ users: { $elemMatch: { $eq: userId } } }).populate("users", " -Password").
-    populate("GroupAdmin", " -Password").populate("LatestMessage").sort({updateAt: -1}).then(async(results)=>{
-        results = await user.populate(results,{ path:"users.sender",
-        select: "username Profile email"
-        }
-           
-            
-        );
-    });
-res.json(result);
-  } catch (error) {
-   res.status(500).json({ error: "Internal server error" }); console.error(error);
-    
-  }
-};
+    let results; // Declare the results variable
+    try {
+      const userId = req.user.userId;
+      await Chat.find({ users: userId })
+        .populate("users", "-Password")
+        .populate("GroupAdmin", "-Password")
+        .populate("LatestMessage")
+        .sort({ updatedAt: -1 })
+        .then(async (chatResults) => {
+          results = await Chat.populate(chatResults, {
+            path: "users.sender",
+            select: "username Profile email",
+          });
+        });
+      res.json(results);
+    } catch (error) {
+      res.status(500).json({ error: "Internal server error" });
+      console.error(error);
+    }
+  };
 exports.acesschat= async(req,res)=>{
     
         const{Id}= req.body;
